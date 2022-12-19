@@ -8,6 +8,7 @@ import { Document } from 'src/app/models/document.model';
 export class DocumentService {
   currentDocument = this.socket.fromEvent<Document>('document');
   documents = this.socket.fromEvent<string[]>('documents');
+  connections = this.socket.fromEvent<number>('connections');
 
   constructor(private socket: Socket) { }
 

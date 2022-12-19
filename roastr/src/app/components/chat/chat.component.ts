@@ -3,11 +3,11 @@ import { Subscription } from 'rxjs';
 import { ChatService } from 'src/app/services/chat.service';
 
 @Component({
-  selector: 'app-home',
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss']
+  selector: 'app-chat',
+  templateUrl: './chat.component.html',
+  styleUrls: ['./chat.component.scss']
 })
-export class HomeComponent implements OnInit {
+export class ChatComponent implements OnInit {
   test;
   newMessage: string;
   messageList: string[] = [];

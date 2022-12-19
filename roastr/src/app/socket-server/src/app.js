@@ -10,15 +10,17 @@ const io = require('socket.io')(http, {
     allowEIO3: true
 });
 const documents = {};
+const messages = [];
 
 io.on("connection", socket => {
     let previousId;
-
+    
     const safeJoin = async currentId => {
       socket.leave(previousId);
       socket.join(currentId, () => console.log(`Socket ${socket.id} joined room ${currentId}`));
       previousId = currentId;
     };
+
     // ...
 
     socket.on("getDoc", docId => {
@@ -44,6 +46,18 @@ io.on("connection", socket => {
     
     // ...
 
+    socket.on('addMessage', (message) =>{
+      // messages.push(message);
+      // io.emit('messages', messages);
+      io.emit('messages', message);
+    });
+
+    // ...
+
+    //broadcast connection count to io to all connections
+    io.emit('connections', io.engine.clientsCount);
+
+    //broadcast documents to all connections
     io.emit("documents", Object.keys(documents));
 
     console.log(`Socket ${socket.id} has connected`);

@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Observable, Subscription } from 'rxjs';
+import { Observable, Subject, Subscription } from 'rxjs';
 import { DocumentService } from 'src/app/services/document.service';
 
 @Component({
@@ -10,17 +10,23 @@ import { DocumentService } from 'src/app/services/document.service';
 export class DocumentListComponent implements OnInit, OnDestroy {
   documents: Observable<string[]>;
   currentDoc: string;
+  connections: number;
   private _docSub: Subscription;
+  private _connections: Subscription;
 
   constructor(private documentService: DocumentService) { }
 
   ngOnInit() {
     this.documents = this.documentService.documents;
     this._docSub = this.documentService.currentDocument.subscribe(doc => this.currentDoc = doc.id);
+    this._connections = this.documentService.connections.subscribe(x => {
+      this.connections = x
+    });
   }
 
   ngOnDestroy() {
     this._docSub.unsubscribe();
+    this._connections.unsubscribe();
   }
 
   loadDoc(id: string) {

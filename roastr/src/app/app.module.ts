@@ -8,6 +8,10 @@ import { FormsModule } from '@angular/forms';
 import { DocumentListComponent } from './components/document-list/document-list.component';
 import { DocumentComponent } from './components/document/document.component';
 import { SocketIoConfig, SocketIoModule } from 'ngx-socket-io';
+import { ExampleComponent } from './components/example/example.component';
+import { ChatComponent } from './components/chat/chat.component';
+import { NavComponent } from './components/nav/nav.component';
+
 
 const config: SocketIoConfig = { url: 'http://localhost:4444', options: {} };
 
@@ -16,7 +20,10 @@ const config: SocketIoConfig = { url: 'http://localhost:4444', options: {} };
     AppComponent,
     HomeComponent,
     DocumentListComponent,
-    DocumentComponent
+    DocumentComponent,
+    ExampleComponent,
+    ChatComponent,
+    NavComponent
   ],
   imports: [
     FormsModule,
