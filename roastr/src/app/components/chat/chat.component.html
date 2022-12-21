@@ -4,11 +4,9 @@
     </li>  
 </div>
 
-<div class="row">
-    <div class="col">
-        <div class="input-group mb-3">
-            <input [(ngModel)]="newMessage" (keydown.enter)="sendMessage()" type="text" class="form-control" placeholder="message">
-          </div>
-        <div class="btn btn-primary float-end" (click)="sendMessage()">Send</div>
+
+<div class="input-group mb-3">
+    <input [(ngModel)]="newMessage" (keydown.enter)="sendMessage()" type="text" class="form-control" placeholder="message">
     </div>
-</div>
+<div class="btn btn-primary float-end" (click)="sendMessage()">Send</div>
+

@@ -11,6 +11,15 @@ const io = require('socket.io')(http, {
 });
 const documents = {};
 const messages = [];
+const roastRooms = 
+  [{
+    id: (Math.random() + 1).toString(36).substring(7),
+    user1: (Math.random() + 1).toString(36).substring(7),
+    user2: (Math.random() + 1).toString(36).substring(7),
+    viewers: Math.floor(Math.random() * 1000),
+    likes: Math.floor(Math.random() * 10000),
+    tag:  "HOT"
+  }];
 
 io.on("connection", socket => {
     let previousId;
@@ -53,6 +62,25 @@ io.on("connection", socket => {
     });
 
     // ...
+
+    socket.on('addRoom', () => {
+      let num = Math.floor(Math.random() * 3);
+      let room = {
+        id: (Math.random() + 1).toString(36).substring(7),
+        user1: (Math.random() + 1).toString(36).substring(7),
+        user2: (Math.random() + 1).toString(36).substring(7),
+        viewers: Math.floor(Math.random() * 1000),
+        likes: Math.floor(Math.random() * 10000),
+        tag: num
+      }
+      roastRooms.push(room);
+      io.emit('getRoastRooms', roastRooms);
+    });
+
+    // ...
+
+    
+    io.emit('getRoastRooms', roastRooms);
 
     //broadcast connection count to io to all connections
     io.emit('connections', io.engine.clientsCount);
