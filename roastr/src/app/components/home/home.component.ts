@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { ChatService } from 'src/app/services/chat.service';
+import { RoastRoomService } from 'src/app/services/roast-room.service';
 
 @Component({
   selector: 'app-home',
@@ -8,25 +9,25 @@ import { ChatService } from 'src/app/services/chat.service';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
-  test;
-  newMessage: string;
-  messageList: string[] = [];
-  _messages: Subscription;
-
-  constructor(private chatService: ChatService) { }
-
-  ngOnInit(): void {
-    this._messages = this.chatService.messages.subscribe(x => {
-      this.messageList.push(x);
+  roastRooms: [] = [];
+  _roastRooms: Subscription;
+  constructor(
+    private roastRoomService: RoastRoomService,
+  ) { 
+    this._roastRooms = this.roastRoomService.roastRooms.subscribe(x => {
+      this.roastRooms = x;
     });
   }
 
-  sendMessage() {
-    this.chatService.sendMessage(this.newMessage);
-    this.newMessage = '';
+  ngOnInit(): void {
+
   }
 
-  ngOnDestroy() {
-    this._messages.unsubscribe();
+  addRoom() {
+    this.roastRoomService.addRoom();
   }
+
+  // ngOnDestroy() {
+  //   this._roastRooms.unsubscribe();
+  // }
 }

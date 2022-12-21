@@ -1,0 +1,12 @@
+<div class="card" style="width: 18rem;">
+    <img src="https://www.simplyrecipes.com/thmb/vTVOdUUb9eLwMS9ThpYjWJMlaVM=/750x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/Simply-Recipes-Roast-Beef-SEO-1de45b2fe5244c399012bf7941dc40cc.jpg" class="card-img-top">
+    <div class="card-body">
+        <div class="badge float-end" [ngClass]="getClass(model.tag)">{{ getTag(model.tag)}}</div>
+        <h5 class="card-title">{{model.user1}} vs {{model.user2}}</h5>
+        <p class="card-text">{{model.viewers}} Viewers</p>
+        <p class="card-text">{{model.likes}} Likes</p>
+        <div class="d-flex justify-content-center">
+            <a [routerLink]="['/roast-room', model.id]" class="btn btn-primary">Watch Now!</a>
+        </div>
+    </div>
+</div>
