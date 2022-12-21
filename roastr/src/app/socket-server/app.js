@@ -9,8 +9,9 @@ const io = require('socket.io')(http, {
     },
     allowEIO3: true
 });
-const documents = {};
+
 const messages = [];
+const readyUsers = ["initialUser"];
 const roastRooms = 
   [{
     id: (Math.random() + 1).toString(36).substring(7),
@@ -24,46 +25,13 @@ const roastRooms =
 io.on("connection", socket => {
     let previousId;
     
-    const safeJoin = async currentId => {
+    const safeJoin = currentId => {
       socket.leave(previousId);
       socket.join(currentId, () => console.log(`Socket ${socket.id} joined room ${currentId}`));
       previousId = currentId;
     };
 
-    // ...
-
-    socket.on("getDoc", docId => {
-        safeJoin(docId);
-        socket.emit("document", documents[docId]);
-      });
-
-    // ...
-
-    socket.on("addDoc", doc => {
-        documents[doc.id] = doc;
-        safeJoin(doc.id);
-        io.emit("documents", Object.keys(documents));
-        socket.emit("document", doc);
-      });
-
-    // ..
-
-    socket.on("editDoc", doc => {
-        documents[doc.id] = doc;
-        socket.to(doc.id).emit("document", doc);
-      });
-    
-    // ...
-
-    socket.on('addMessage', (message) =>{
-      // messages.push(message);
-      // io.emit('messages', messages);
-      io.emit('messages', message);
-    });
-
-    // ...
-
-    socket.on('addRoom', () => {
+    const addRoom = () => {
       let num = Math.floor(Math.random() * 3);
       let room = {
         id: (Math.random() + 1).toString(36).substring(7),
@@ -75,18 +43,74 @@ io.on("connection", socket => {
       }
       roastRooms.push(room);
       io.emit('getRoastRooms', roastRooms);
+      return room;
+    };
+
+    const addRoomWithUsers = (user1) => {
+      let num = Math.floor(Math.random() * 3);
+      let room = {
+        id: (Math.random() + 1).toString(36).substring(7),
+        user1: user1,
+        user2: (Math.random() + 1).toString(36).substring(7),
+        viewers: Math.floor(Math.random() * 1000),
+        likes: Math.floor(Math.random() * 10000),
+        tag: num
+      }
+      roastRooms.push(room);
+      io.emit('getRoastRooms', roastRooms);
+      return room;
+    };
+
+    // ...
+
+    socket.on("getRoastRooms", () => {
+      io.emit('getRoastRooms', roastRooms);
     });
 
     // ...
 
+    socket.on('addMessage', (message) =>{
+      io.emit('messages', message);
+    });
+
+    // ...
+
+    socket.on('addRoom', () => {
+      addRoom();
+    });
+
+    // ...
+    socket.on("addRoomAndGetId", (arg, callback) => {
+      let room = addRoom();
+      callback(room.id);
+    });
+
+    // ...
+
+    socket.on("getRoomDetails", (roomId, callback) => {
+
+      var room = roastRooms.find(x => x.id == roomId);
+      callback(room);
+    });
+
+    // ...
+
+    socket.on("addReadyUser", (userId, callback) => {
+      readyUsers.push(userId);
+      if (readyUsers.length > 1) {
+        var newRoom = addRoomWithUsers(readyUsers[1]);
+        var room = roastRooms.find(x => x.id == newRoom.id);
+        callback(room);
+      }
+      callback(false);
+    });
+
+    // ...
     
     io.emit('getRoastRooms', roastRooms);
 
     //broadcast connection count to io to all connections
     io.emit('connections', io.engine.clientsCount);
-
-    //broadcast documents to all connections
-    io.emit("documents", Object.keys(documents));
 
     console.log(`Socket ${socket.id} has connected`);
   });

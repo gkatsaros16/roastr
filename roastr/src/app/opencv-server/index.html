@@ -4,7 +4,7 @@
         <img id="image">
         <script src="https://cdn.socket.io/4.5.4/socket.io.min.js" integrity="sha384-/KNQL8Nu5gCHLqwqfQjA689Hhoqgi2S84SNUxC3roTe4EhJ9AfLkp8QiQcU8AMzI" crossorigin="anonymous"></script>
         <script>
-            const socket = io.connect('http://localhost:4445');
+            const socket = io.connect('http://localhost:4447');
             socket.on('image', (image) => {
                 const imageElm = document.getElementById('image');
                 imageElm.src = `data:image/jpeg;base64,${image}`;

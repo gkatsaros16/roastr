@@ -14,20 +14,26 @@ export class HomeComponent implements OnInit {
   constructor(
     private roastRoomService: RoastRoomService,
   ) { 
-    this._roastRooms = this.roastRoomService.roastRooms.subscribe(x => {
-      this.roastRooms = x;
-    });
+
   }
 
   ngOnInit(): void {
-
+    this._roastRooms = this.roastRoomService.roastRooms.subscribe(x => {
+      this.roastRooms = x;
+    });
+    
+    this.roastRoomService.getRooms();
   }
 
   addRoom() {
     this.roastRoomService.addRoom();
   }
 
-  // ngOnDestroy() {
-  //   this._roastRooms.unsubscribe();
-  // }
+  makeRoom() {
+    this.roastRoomService.addRoomAndGetId();
+  }
+
+  ngOnDestroy() {
+    this._roastRooms.unsubscribe();
+  }
 }

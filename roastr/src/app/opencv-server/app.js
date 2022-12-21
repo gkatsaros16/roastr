@@ -18,7 +18,7 @@ setInterval(() => {
     io.emit('image', image)
 }, 1000 / FPS);
 
-http.listen(4445, () => {
-console.log('Listening on port 4445');
+http.listen(4447, () => {
+console.log('Listening on port 4447');
 });
 

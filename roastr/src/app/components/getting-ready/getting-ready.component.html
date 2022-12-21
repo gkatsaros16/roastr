@@ -1,0 +1,22 @@
+<!-- <div *ngIf="(roomDetails$ | async) as roomDetails"> -->
+<div class="row">
+    <div class="col">
+        <div *ngIf="!isConnected" (click)="connect()" class="btn btn-primary">
+            Connect
+        </div>
+        <ng-container *ngIf="isConnected">
+            <!-- {{ roomDetails.user1 }} -->
+            <img src="https://www.svg.com/img/gallery/the-untold-truth-of-adin-ross/intro-1622579107.webp" class="img-fluid" alt="">
+        </ng-container>
+        <div class="row">
+            <div class="col">
+                <div *ngIf="isConnected && !micTested" class="btn btn-primary" (click)="testMic()">Test Mic</div>
+                <div *ngIf="isConnected && !agreeTerms" class="btn btn-primary" (click)="agreeToTerms()">Agree Terms</div>
+                <div *ngIf="!isReady && isConnected && micTested && agreeTerms" class="btn btn-primary" (click)="ready()">Ready</div>
+                <div *ngIf="isReady" class="btn btn-danger" (click)="unready()">Unready</div>               
+            </div>
+        </div>
+    </div>
+</div>
+<!-- </div> -->
+

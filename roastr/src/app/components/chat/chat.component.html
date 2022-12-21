@@ -1,12 +1,10 @@
 <div *ngFor="let message of messageList">
-    <li>
-        {{message}}
-    </li>  
+    <div class="text-wrap text-break">{{message}}</div>
 </div>
 
 
 <div class="input-group mb-3">
-    <input [(ngModel)]="newMessage" (keydown.enter)="sendMessage()" type="text" class="form-control" placeholder="message">
+    <input [(ngModel)]="newMessage" maxlength="200" (keydown.enter)="sendMessage()" type="text" class="form-control" placeholder="message">
     </div>
 <div class="btn btn-primary float-end" (click)="sendMessage()">Send</div>
 

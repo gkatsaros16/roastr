@@ -16,6 +16,8 @@ import { ExamplePageComponent } from './pages/example/example-page.component';
 import { HomePageComponent } from './pages/home/home-page.component';
 import { RoastRoomPageComponent } from './pages/roast-room/roast-room-page.component';
 import { RoastRoomCardComponent } from './components/roast-room-card/roast-room-card.component';
+import { GettingReadyComponent } from './components/getting-ready/getting-ready.component';
+import { GettingReadyPageComponent } from './pages/getting-ready-page/getting-ready-page.component';
 
 
 const config: SocketIoConfig = { url: 'http://localhost:4444', options: {} };
@@ -33,7 +35,9 @@ const config: SocketIoConfig = { url: 'http://localhost:4444', options: {} };
     ExamplePageComponent,
     RoastRoomPageComponent,
     HomePageComponent,
-    RoastRoomCardComponent
+    RoastRoomCardComponent,
+    GettingReadyComponent,
+    GettingReadyPageComponent
   ],
   imports: [
     FormsModule,
