@@ -10,26 +10,41 @@ const io = require('socket.io')(http, {
     allowEIO3: true
 });
 
-const messages = [];
-const readyUsers = ["initialUser"];
-const roastRooms = 
-  [{
-    id: (Math.random() + 1).toString(36).substring(7),
-    user1: (Math.random() + 1).toString(36).substring(7),
-    user2: (Math.random() + 1).toString(36).substring(7),
-    viewers: Math.floor(Math.random() * 1000),
-    likes: Math.floor(Math.random() * 10000),
-    tag:  "HOT"
-  }];
+const readyUsers = [];
+const roastRooms =  [];
 
 io.on("connection", socket => {
     let previousId;
+    const sleep = () => new Promise(r => setTimeout(r, 2000));
     
     const safeJoin = currentId => {
       socket.leave(previousId);
       socket.join(currentId, () => console.log(`Socket ${socket.id} joined room ${currentId}`));
       previousId = currentId;
     };
+
+    const findPair = async (user) => {
+      
+      if (readyUsers.length > 1) {
+        let user1Index = readyUsers.map((x) => { 
+          return x.id; 
+        }).indexOf(user?.id);
+        let user2Index = await getPairIndex(user1Index)
+        let newRoom = addRoomWithUsers(readyUsers[user1Index], readyUsers[user2Index]);
+        let room = roastRooms.find(x => x.id == newRoom.id);
+        return room;
+      }
+      await sleep();
+      return await findPair(user);
+    }
+
+    const getPairIndex = async (index) => {
+      let user2index = Math.floor(Math.random() * readyUsers.length)
+      if (index == user2index) {
+        return getPairIndex(index);
+      }
+      return user2index;
+    }
 
     const addRoom = () => {
       let num = Math.floor(Math.random() * 3);
@@ -46,12 +61,12 @@ io.on("connection", socket => {
       return room;
     };
 
-    const addRoomWithUsers = (user1) => {
+    const addRoomWithUsers = (user1, user2) => {
       let num = Math.floor(Math.random() * 3);
       let room = {
         id: (Math.random() + 1).toString(36).substring(7),
-        user1: user1,
-        user2: (Math.random() + 1).toString(36).substring(7),
+        user1: user1?.username,
+        user2: user2?.username,
         viewers: Math.floor(Math.random() * 1000),
         likes: Math.floor(Math.random() * 10000),
         tag: num
@@ -60,6 +75,13 @@ io.on("connection", socket => {
       io.emit('getRoastRooms', roastRooms);
       return room;
     };
+
+    // ...
+
+    socket.on("addReadyUser", async (user, callback) => {
+      readyUsers.push(user);
+      await findPair(user).then(x => x ? callback(x) : null);
+    });
 
     // ...
 
@@ -91,18 +113,6 @@ io.on("connection", socket => {
 
       var room = roastRooms.find(x => x.id == roomId);
       callback(room);
-    });
-
-    // ...
-
-    socket.on("addReadyUser", (userId, callback) => {
-      readyUsers.push(userId);
-      if (readyUsers.length > 1) {
-        var newRoom = addRoomWithUsers(readyUsers[1]);
-        var room = roastRooms.find(x => x.id == newRoom.id);
-        callback(room);
-      }
-      callback(false);
     });
 
     // ...

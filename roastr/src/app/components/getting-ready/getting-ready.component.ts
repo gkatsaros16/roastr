@@ -11,6 +11,7 @@ export class GettingReadyComponent implements OnInit {
   isReady: boolean = false;
   micTested: boolean = false;
   agreeTerms: boolean = false;
+  user;
 
   constructor(
     private roastRoomService: RoastRoomService
@@ -19,7 +20,10 @@ export class GettingReadyComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
+    this.user = {
+      id: (Math.random() + 1).toString(36).substring(7),
+      username: `User#${(Math.random() + 1).toString(36).substring(10)}`
+    }
   }
 
   connect() {
@@ -36,7 +40,7 @@ export class GettingReadyComponent implements OnInit {
 
   ready() {
     this.isReady = true;
-    this.roastRoomService.sendReadyUser();
+    this.roastRoomService.sendReadyUser(this.user);
   }
 
   unready() {

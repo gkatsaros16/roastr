@@ -38,11 +38,10 @@ export class RoastRoomService {
     });
   }
 
-  public sendReadyUser() {
-    this.socket.emit("addReadyUser", "adinRoss", (response) => {
-      if (!response) {
-        this.sendReadyUser();
-      } else {
+  public sendReadyUser(user) {
+    this.socket.emit("addReadyUser", user, (response) => {
+      if (response) {
+        console.log(response)
         this.router.navigate(["../roast-room", response.id])
       }
     });
